@@ -76,19 +76,19 @@ export class addUpdateCandidate extends Component {
     
         this.validator = new FormValidator([
             // { 
-            //     field: 'aadhar_number', 
+            //     field: 'aadhar_no', 
             //     method: 'isEmpty', 
             //     validWhen: false, 
             //     message: 'Aadhar number is required' 
             // },
             // { 
-            //     field: 'aadhar_number', 
+            //     field: 'aadhar_no', 
             //     method: aadharValidator.isValidNumber, 
             //     validWhen: true, 
             //     message: 'Aadhar number is invalid' 
             // },
             // { 
-            //     field: 'aadhar_number', 
+            //     field: 'aadhar_no', 
             //     method:  CandidateService.checkAadhar, 
             //     validWhen: false, 
             //     message: 'Candidate already registered with this aadhar number' 
@@ -223,7 +223,7 @@ export class addUpdateCandidate extends Component {
           ]);
 
         this.state = {
-            aadhar_number:'',
+            aadhar_no:'',
             name: '',
             phone_number:'',
             dob: '',
@@ -252,6 +252,7 @@ export class addUpdateCandidate extends Component {
         }
 
         this.submitted = false;
+        this.baseState = this.state
     }
 
     async componentDidMount(){
@@ -261,7 +262,7 @@ export class addUpdateCandidate extends Component {
              candidateData = await CandidateService.selectedCandidate(this.props.location.state.Id)
             this.setState({
                 _id:candidateData._id,
-                aadhar_number: candidateData.aadhar_no,
+                aadhar_no: candidateData.aadhar_no,
                 name: candidateData.name,
                 phone_number: candidateData.phone_number,
                 dob: new Date(candidateData.dob),
@@ -313,20 +314,35 @@ export class addUpdateCandidate extends Component {
         })
     }
 
-    submitHandler = (event) => {
+    submitHandler = async (event) => {
         const validation = this.validator.validate(this.state);
         
         this.setState({ validation });
         this.submitted = true;
-        // if(validation){
-        //     const candidateServiceResponse = await CandidateService.addCandidate(this.state);
-        //     if(candidateServiceResponse.status === 201){
-        //         this.props.history.push("/candidates");
-        //         notification.createNotification(candidateServiceResponse.status,"Candidate Created Successfully")
-        //     }else{
-        //         notification.createNotification(500,"Something went wrong")
-        //     }
-        // }
+        if(validation){
+            const candidateServiceResponse = await CandidateService.addCandidate(this.state);
+            if(candidateServiceResponse.status === 201){
+                this.props.history.push("/candidates");
+                notification.createNotification(candidateServiceResponse.status,"Candidate Created Successfully")
+            }else{
+                notification.createNotification(500,"Something went wrong")
+            }
+        }
+    }
+
+    updateHandler = async (event)=>{
+        const validation = this.validator.validate(this.state);
+        this.setState({ validation });
+        this.submitted = true;
+        if(validation){
+            const candidateServiceResponse = await CandidateService.updateCandidate(this.state)
+            if(candidateServiceResponse !== undefined && candidateServiceResponse.status === 200){
+                this.props.history.push("/candidates");
+                notification.createNotification(candidateServiceResponse.status,"Candidate Updated Successfully")
+            }else{
+                notification.createNotification(500,"Something Went Wrong")
+            }
+        }
     }
     
     render() {
@@ -334,50 +350,50 @@ export class addUpdateCandidate extends Component {
         return (
             <div>
                 <TopNav/>
-                <div class="container">
-                    <div class="col s12 m12">
-                        <div class="card ">
-                            <div class="card-content">
-                                <span class="card-title" style={{ textAlign: 'center' }}>Fill Candidate Details</span>
+                <div className="container">
+                    <div className="col s12 m12">
+                        <div className="card ">
+                            <div className="card-content">
+                                <span className="card-title" style={{ textAlign: 'center' }}>Fill Candidate Details</span>
                                 <h5>Personal Details</h5>
                                 <hr/>
-                                <div class="row">
-                                    <div class="input-field col s6">
-                                        <input id="aadhar_number" name="aadhar_number" type="text" class="validate" onChange={this.inputHandler} value={this.state.aadhar_number}/>
-                                        <label for="aadhar_number" className={this.state.update ? `active`:null}>Aadhar Number</label>
-                                        {/* <span className="helper-text" style={{color:'red'}}>{validation.aadhar_number.message}</span> */}
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <input id="aadhar_no" name="aadhar_no" type="text" className="validate" onChange={this.inputHandler} value={this.state.aadhar_no}/>
+                                        <label htmlFor="aadhar_no" className={this.state.update ? `active`:null}>Aadhar Number</label>
+                                        {/* <span className="helper-text" style={{color:'red'}}>{validation.aadhar_no.message}</span> */}
                                     </div>
-                                    <div class="input-field col s6">
-                                        <input id="name" name="name" type="text" class="validate" onChange={this.inputHandler} value={this.state.name}/>
-                                        <label for="name" className="active" className={this.state.update ? `active`:null}>Name</label>
+                                    <div className="input-field col s6">
+                                        <input id="name" name="name" type="text" className="validate" onChange={this.inputHandler} value={this.state.name}/>
+                                        <label htmlFor="name" className="active" className={this.state.update ? `active`:null}>Name</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.name.message}</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-field col s6">
-                                        <input id="phone_number" name="phone_number" type="text" class="validate" onChange={this.inputHandler} value={this.state.phone_number}/>
-                                        <label for="phone_number" className={this.state.update ? `active`:null}>Phone Number</label>
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <input id="phone_number" name="phone_number" type="text" className="validate" onChange={this.inputHandler} value={this.state.phone_number}/>
+                                        <label htmlFor="phone_number" className={this.state.update ? `active`:null}>Phone Number</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.phone_number.message}</span>
                                     </div>
-                                    <div class="input-field col s6">
-                                        <input id="name" type="text" class="datepicker validate"></input>
-                                        <label for="name" className={this.state.update ? `active`:null}>DOB</label>
+                                    <div className="input-field col s6">
+                                        <input id="name" type="text" className="datepicker validate"></input>
+                                        <label htmlFor="name" className={this.state.update ? `active`:null}>DOB</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.dob.message}</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-field col s6">
-                                        <input id="alternate_phone_number" name="alternate_phone_number" type="text" class="validate" onChange={this.inputHandler} value={this.state.alternate_phone_number}/>
-                                        <label for="alternate_phone_number" className={this.state.update ? `active`:null}>Alternate Phone Number</label>
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <input id="alternate_phone_number" name="alternate_phone_number" type="text" className="validate" onChange={this.inputHandler} value={this.state.alternate_phone_number}/>
+                                        <label htmlFor="alternate_phone_number" className={this.state.update ? `active`:null}>Alternate Phone Number</label>
                                     </div>
-                                    <div class="input-field col s6">
-                                        <input id="email" name="email" type="text" class="validate" onChange={this.inputHandler} value={this.state.email}/>
-                                        <label for="email" className={this.state.update ? `active`:null}>Email</label>
+                                    <div className="input-field col s6">
+                                        <input id="email" name="email" type="text" className="validate" onChange={this.inputHandler} value={this.state.email}/>
+                                        <label htmlFor="email" className={this.state.update ? `active`:null}>Email</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.email.message}</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-field col s6">
+                                <div className="row">
+                                    <div className="input-field col s6">
                                         <select name="gender" onChange={this.inputHandler}>
                                             <option value="" disabled selected>Choose Your Option</option>
                                             <option value="Male">Male</option>
@@ -389,51 +405,51 @@ export class addUpdateCandidate extends Component {
                                 </div>
                                 <h5>Address</h5>
                                 <hr/>
-                                <div class="row">
-                                    <div class="input-field col s6">
-                                        <input id="address_1" name="address_1" type="text" class="validate" onChange={this.inputHandler} value={this.state.address_1}/>
-                                        <label for="address_1" className={this.state.update ? `active`:null}>Address Line 1</label>
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <input id="address_1" name="address_1" type="text" className="validate" onChange={this.inputHandler} value={this.state.address_1}/>
+                                        <label htmlFor="address_1" className={this.state.update ? `active`:null}>Address Line 1</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.address_1.message}</span>
                                     </div>
-                                    <div class="input-field col s6">
-                                        <input id="address_2" name="address_2" type="text" class="validate" onChange={this.inputHandler} value={this.state.address_2}/>
-                                        <label for="address_2" className={this.state.update ? `active`:null}>Address Line 2</label>
+                                    <div className="input-field col s6">
+                                        <input id="address_2" name="address_2" type="text" className="validate" onChange={this.inputHandler} value={this.state.address_2}/>
+                                        <label htmlFor="address_2" className={this.state.update ? `active`:null}>Address Line 2</label>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-field col s6">
-                                        <input id="country" name="country" type="text" class="validate" onChange={this.inputHandler} value={this.state.country}/>
-                                        <label for="country" className={this.state.update ? `active`:null}>Country</label>
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <input id="country" name="country" type="text" className="validate" onChange={this.inputHandler} value={this.state.country}/>
+                                        <label htmlFor="country" className={this.state.update ? `active`:null}>Country</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.country.message}</span>
                                     </div>
-                                    <div class="input-field col s6">
-                                        <input id="state" name="state" type="text" class="validate" onChange={this.inputHandler} value={this.state.state}/>
-                                        <label for="state" className={this.state.update ? `active`:null}>State</label>
+                                    <div className="input-field col s6">
+                                        <input id="state" name="state" type="text" className="validate" onChange={this.inputHandler} value={this.state.state}/>
+                                        <label htmlFor="state" className={this.state.update ? `active`:null}>State</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.state.message}</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-field col s6">
-                                        <input id="district" name="district" type="text" class="validate" onChange={this.inputHandler} value={this.state.district}/>
-                                        <label for="district" className={this.state.update ? `active`:null}>District</label>
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <input id="district" name="district" type="text" className="validate" onChange={this.inputHandler} value={this.state.district}/>
+                                        <label htmlFor="district" className={this.state.update ? `active`:null}>District</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.district.message}</span>
                                     </div>
-                                    <div class="input-field col s6">
-                                        <input id="city" name="city" type="text" class="validate" onChange={this.inputHandler} value={this.state.city}/>
-                                        <label for="city" className={this.state.update ? `active`:null}>City</label>
+                                    <div className="input-field col s6">
+                                        <input id="city" name="city" type="text" className="validate" onChange={this.inputHandler} value={this.state.city}/>
+                                        <label htmlFor="city" className={this.state.update ? `active`:null}>City</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.city.message}</span>
                                     </div>
                                 </div>
                                 <h5>Other Details</h5>
                                 <hr/>
-                                <div class="row">
-                                    <div class="input-field col s6">
+                                <div className="row">
+                                    <div className="input-field col s6">
                                         <select name="source" onChange={this.inputHandler}>
                                             <option value="" disabled selected>Choose Your Option</option>
                                             {
                                                 source.map((slice, index)=>{
                                                     return(
-                                                        <option value={slice.value} selected={this.state.source === slice.value ? true : false}>{slice.label}</option>
+                                                        <option key={slice.value} value={slice.value} selected={this.state.source === slice.value ? true : false}>{slice.label}</option>
                                                     )
                                                 })
                                             }
@@ -441,13 +457,13 @@ export class addUpdateCandidate extends Component {
                                         <label>Source</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.source.message}</span>
                                     </div>
-                                    <div class="input-field col s6">
+                                    <div className="input-field col s6">
                                         <select name="source_type" onChange={this.inputHandler}>
                                             <option value="" disabled selected>Choose Your Option</option>
                                             {
                                                 sourceTypes.map((slice, index)=>{
                                                     return(
-                                                        <option value={slice.value} selected={this.state.source_type === slice.value ? true : false}>{slice.label}</option>
+                                                        <option key={slice.value} value={slice.value} selected={this.state.source_type === slice.value ? true : false}>{slice.label}</option>
                                                     )
                                                 })
                                             }
@@ -456,14 +472,14 @@ export class addUpdateCandidate extends Component {
                                         <span className="helper-text" style={{color:'red'}}>{validation.source_type.message}</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-field col s6">
+                                <div className="row">
+                                    <div className="input-field col s6">
                                         <select name="employment_status" onChange={this.inputHandler}>
                                             <option value="" disabled selected>Choose Your Option</option>
                                             {
                                                 employmentStatus.map((slice, index)=>{
                                                     return(
-                                                        <option value={slice.value} selected={this.state.employment_status === slice.value ? true : false}>{slice.label}</option>
+                                                        <option key={slice.value} value={slice.value} selected={this.state.employment_status === slice.value ? true : false}>{slice.label}</option>
                                                     )
                                                 })
                                             }
@@ -471,13 +487,13 @@ export class addUpdateCandidate extends Component {
                                         <label>Employment Status</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.employment_status.message}</span>
                                     </div>
-                                    <div class="input-field col s6">
+                                    <div className="input-field col s6">
                                         <select name="occupation" onChange={this.inputHandler}>
                                             <option value="" disabled selected>Choose Your Option</option>
                                             {
                                                 occupation.map((slice, index)=>{
                                                     return(
-                                                        <option value={slice.value} selected={this.state.occupation === slice.value ? true : false}>{slice.label}</option>
+                                                        <option key={slice.value} value={slice.value} selected={this.state.occupation === slice.value ? true : false}>{slice.label}</option>
                                                     )
                                                 })
                                             }
@@ -486,14 +502,14 @@ export class addUpdateCandidate extends Component {
                                         <span className="helper-text" style={{color:'red'}}>{validation.occupation.message}</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-field col s6">
+                                <div className="row">
+                                    <div className="input-field col s6">
                                         <select name="annual_income" onChange={this.inputHandler}>
                                             <option value="" disabled selected>Choose Your Option</option>
                                             {
                                                 annualIncome.map((slice, index)=>{
                                                     return(
-                                                        <option value={slice.value} selected={this.state.annual_income === slice.value ? true : false}>{slice.label}</option>
+                                                        <option key={slice.value} value={slice.value} selected={this.state.annual_income === slice.value ? true : false}>{slice.label}</option>
                                                     )
                                                 })
                                             }
@@ -501,13 +517,13 @@ export class addUpdateCandidate extends Component {
                                         <label>Current Annual Income</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.annual_income.message}</span>
                                     </div>
-                                    <div class="input-field col s6">
+                                    <div className="input-field col s6">
                                         <select name="educational_qualification" onChange={this.inputHandler}>
                                             <option value="" disabled selected>Choose Your Option</option>
                                             {
                                                 educationalQualification.map((slice, index)=>{
                                                     return(
-                                                        <option value={slice.value} selected={this.state.educational_qualification === slice.value ? true : false}>{slice.label}</option>
+                                                        <option key={slice.value} value={slice.value} selected={this.state.educational_qualification === slice.value ? true : false}>{slice.label}</option>
                                                     )
                                                 })
                                             }
@@ -516,26 +532,26 @@ export class addUpdateCandidate extends Component {
                                         <span className="helper-text" style={{color:'red'}}>{validation.educational_qualification.message}</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-field col s6">
-                                        <input id="successful_enterprises" name="successful_enterprises" type="number" class="validate" onChange={this.inputHandler} value={this.state.successful_enterprises}/>
-                                        <label for="successful_enterprises" className={this.state.update ? `active`:null}>Number of successful enterprises</label>
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <input id="successful_enterprises" name="successful_enterprises" type="number" className="validate" onChange={this.inputHandler} value={this.state.successful_enterprises}/>
+                                        <label htmlFor="successful_enterprises" className={this.state.update ? `active`:null}>Number of successful enterprises</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.successful_enterprises.message}</span>
                                     </div>
-                                    <div class="input-field col s6">
-                                        <input id="failed_enterprises" name="failed_enterprises" type="number" class="validate" onChange={this.inputHandler} value={this.state.failed_enterprises}/>
-                                        <label for="failed_enterprises" className={this.state.update ? `active`:null}>Number of failed enterprises</label>
+                                    <div className="input-field col s6">
+                                        <input id="failed_enterprises" name="failed_enterprises" type="number" className="validate" onChange={this.inputHandler} value={this.state.failed_enterprises}/>
+                                        <label htmlFor="failed_enterprises" className={this.state.update ? `active`:null}>Number of failed enterprises</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.failed_enterprises.message}</span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-field col s6">
+                                <div className="row">
+                                    <div className="input-field col s6">
                                         <select name="status" onChange={this.inputHandler}>
                                             <option value="" disabled selected>Choose Your Option</option>
                                             {
                                                 status.map((slice, index)=>{
                                                     return(
-                                                        <option value={slice.value} selected={this.state.status === slice.value ? true : false}>{slice.label}</option>
+                                                        <option key={slice.value} value={slice.value} selected={this.state.status === slice.value ? true : false}>{slice.label}</option>
                                                     )
                                                 })
                                             }
@@ -543,11 +559,11 @@ export class addUpdateCandidate extends Component {
                                         <label>Status</label>
                                         <span className="helper-text" style={{color:'red'}}>{validation.status.message}</span>
                                     </div>
-                                    <div class="input-field col s6">
-                                        <div class="input-field col s6">
+                                    <div className="input-field col s6">
+                                        <div className="input-field col s6">
                                             <p>Has Bank Account? :</p>
                                         </div>
-                                       <div class="input-field col s3">
+                                       <div className="input-field col s3">
                                             <p>
                                             <label>
                                                 <input name="bank_account" type="radio" onChange={this.inputHandler} value="true"/>
@@ -555,7 +571,7 @@ export class addUpdateCandidate extends Component {
                                             </label>
                                             </p>
                                        </div>
-                                       <div class="input-field col s3">
+                                       <div className="input-field col s3">
                                        <p>
                                             <label>
                                                 <input name="bank_account" type="radio" onChange={this.inputHandler} value="false"/>
@@ -565,12 +581,12 @@ export class addUpdateCandidate extends Component {
                                        </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="input-field col s6">
-                                        <div class="input-field col s6">
+                                <div className="row">
+                                    <div className="input-field col s6">
+                                        <div className="input-field col s6">
                                             <p>Has a credit history? :</p>
                                         </div>
-                                       <div class="input-field col s3">
+                                       <div className="input-field col s3">
                                             <p>
                                             <label>
                                                 <input name="credit_history" type="radio" onChange={this.inputHandler} value="true"/>
@@ -578,7 +594,7 @@ export class addUpdateCandidate extends Component {
                                             </label>
                                             </p>
                                        </div>
-                                       <div class="input-field col s3">
+                                       <div className="input-field col s3">
                                        <p>
                                             <label>
                                                 <input name="credit_history" type="radio" onChange={this.inputHandler} value="false"/>
@@ -587,11 +603,11 @@ export class addUpdateCandidate extends Component {
                                         </p>
                                        </div>
                                     </div>
-                                    <div class="input-field col s6">
-                                        <div class="input-field col s6">
+                                    <div className="input-field col s6">
+                                        <div className="input-field col s6">
                                             <p>Needs Training? :</p>
                                         </div>
-                                       <div class="input-field col s3">
+                                       <div className="input-field col s3">
                                             <p>
                                             <label>
                                                 <input name="needs_training" type="radio" onChange={this.inputHandler} value="true"/>
@@ -599,7 +615,7 @@ export class addUpdateCandidate extends Component {
                                             </label>
                                             </p>
                                        </div>
-                                       <div class="input-field col s3">
+                                       <div className="input-field col s3">
                                        <p>
                                             <label>
                                                 <input name="needs_training" type="radio" onChange={this.inputHandler} value="false"/>
@@ -610,9 +626,15 @@ export class addUpdateCandidate extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-action" style={{textAlign:'center'}}>
-                            <a class="waves-effect waves-light btn blue" onClick={this.submitHandler}>Submit</a>&emsp;&emsp;
-                            <a class="waves-effect waves-light btn" style={{backgroundColor: '#FF6347'}}>Reset</a>
+                            <div className="card-action" style={{textAlign:'center'}}>
+                                {
+                                    this.props.location.state.Id ? 
+                                    <a className="waves-effect waves-light btn blue" onClick={this.updateHandler}>Update</a> 
+                                    :
+                                    <a className="waves-effect waves-light btn blue" onClick={this.submitHandler}>Submit</a>
+                                }
+                            &emsp;&emsp;
+                            <a className="waves-effect waves-light btn" style={{backgroundColor: '#FF6347'}} onClick={()=>{this.setState(this.baseState)}}>Reset</a>
                             </div>
                          </div>
                     </div>

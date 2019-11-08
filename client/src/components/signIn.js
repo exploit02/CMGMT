@@ -8,8 +8,8 @@ export class signIn extends Component {
         super(props)
       
         this.state = {
-           email: null,
-           password: null
+           email: '',
+           password: ''
         }
     }
       
@@ -30,8 +30,8 @@ export class signIn extends Component {
             if(res.status == 201){
     
               this.setState({
-                email: null ,
-                password: null 
+                email: '' ,
+                password: '' 
               });
     
               const sessionData = {
@@ -66,27 +66,27 @@ export class signIn extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className="col s4 m4" style={{float: "right"}}>
-                        <div class="card signIn_card darken-1">
-                            <div class="card-content">
-                            <span class="card-title" style={{textAlign : `center`}}>Sign In</span>
+                    <div className="col l4 s4 m4 xs4" style={{float: "right"}}>
+                        <div className="card signIn_card darken-1">
+                            <div className="card-content">
+                            <span className="card-title" style={{textAlign : `center`}}>Sign In</span>
                             <div className="row">
-                                <div class="input-field col s12">
-                                    <input id="email" name="email" type="text" class="validate" onChange={this.handleChange} value={this.state.email}/>
-                                    <label for="email">Email</label>
+                                <div className="input-field col s12">
+                                    <input id="email" name="email" type="text" className="validate" onChange={this.handleChange} value={this.state.email}/>
+                                    <label htmlFor="email">Email</label>
                                     <span className="helper-text" style={{color:'red'}}></span>
                                 </div>
                             </div>
                             <div className="row">
-                                <div class="input-field col s12">
-                                    <input id="password" name="password" type="password" class="validate" onChange={this.handleChange} value={this.state.password}/>
-                                    <label for="password">Password</label>
+                                <div className="input-field col s12">
+                                    <input id="password" name="password" type="password" className="validate" onChange={this.handleChange} value={this.state.password}/>
+                                    <label htmlFor="password">Password</label>
                                     <span className="helper-text" style={{color:'red'}}></span>
                                 </div>
                             </div>
                             </div>
                             <div className="row" style={{textAlign : `center`}}>
-                                <a class=" btn blue" style={{marginBottom : `5%`}} onClick={this.handleSubmitForm} textAli>Sign In</a>
+                                <a className=" btn blue" style={{marginBottom : `5%`}} onClick={this.handleSubmitForm}>Sign In</a>
                             </div>
                     </div>
                     </div>

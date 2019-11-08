@@ -74,7 +74,6 @@ export class dashboard extends Component {
         var dashboardDataByGender = await CandidateService.candidateCountByGender(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
         var dashboardDataByStatus = await CandidateService.candidateCountByStatus(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
         var dashboardDataByAgegroup = await CandidateService.candidateCountByAgegroup(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
-        console.log('here');
         var CountByGender = {}
         var CountByAgeGroup = {}
         var CountByStatus = {}
@@ -129,15 +128,10 @@ export class dashboard extends Component {
     }
 
     filterHandler = async()=>{
-        console.log('In filter handler')
-        console.log(this.state)
         var dashboardDataByGender = await CandidateService.candidateCountByGender(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
         var dashboardDataByStatus = await CandidateService.candidateCountByStatus(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
         var dashboardDataByAgegroup = await CandidateService.candidateCountByAgegroup(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
 
-        console.log(dashboardDataByGender)
-        console.log(dashboardDataByStatus)
-        console.log(dashboardDataByAgegroup)
         var CountByGender = {}
         var CountByAgeGroup = {}
         var CountByStatus = {}
@@ -178,7 +172,6 @@ export class dashboard extends Component {
       }
     
     render() {
-        console.log("In render------------------")
         const optionsByGender = {
 			title: {
 				text: "Candiadte Count By Gender"
@@ -254,41 +247,41 @@ export class dashboard extends Component {
             <div>
                 <TopNav/>
                 <div className="container-fluid">
-                    <div class="col s12 m12">
-                        <div class="card ">
-                            <div class="card-content">
+                    <div className="col s12 m12">
+                        <div className="card ">
+                            <div className="card-content">
                                 <div className="row">
                                     <div className="input-field col s3 m3">
-                                        <input type="text" id="from_date" class="datepicker" ref="from"/> 
-                                        <label for="from_date">From</label>
+                                        <input type="text" id="from_date" className="datepicker" ref="from"/> 
+                                        <label htmlFor="from_date">From</label>
                                     </div>
                                     <div className="input-field col s3 m3">
-                                        <input type="text" id="to_date" class="datepicker" ref="to"/>
-                                        <label for="to_date">To</label>
+                                        <input type="text" id="to_date" className="datepicker" ref="to"/>
+                                        <label htmlFor="to_date">To</label>
                                     </div>
                                     <div className="input-field col s3 m3">
-                                        <input id="state" type="text" class="validate" name="state" value={this.state.state} onChange={this.inputHandler}/>
-                                        <label for="state">State</label>
+                                        <input id="state" type="text" className="validate" name="state" value={this.state.state} onChange={this.inputHandler}/>
+                                        <label htmlFor="state">State</label>
                                     </div>
                                     <div className="input-field col s3 m3">
-                                        <input id="city" type="text" class="validate" name="city" value={this.state.city}  onChange={this.inputHandler}/>
-                                        <label for="city">City</label>
+                                        <input id="city" type="text" className="validate" name="city" value={this.state.city}  onChange={this.inputHandler}/>
+                                        <label htmlFor="city">City</label>
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <a class="btn waves-light red lighten-2 filter" onClick={this.filterHandler}>Filter</a>
+                                    <a className="btn waves-light red lighten-2 filter" onClick={this.filterHandler}>Filter</a>
                                 </div>
                                 <div className="row">
                                     <div className="col s6 m6">
-                                        <div class="card blue-grey darken-1">
-                                            <div class="card-content white-text">
+                                        <div className="card blue-grey darken-1">
+                                            <div className="card-content white-text">
                                                 <CanvasJSChart options = {optionsByGender}/>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="col s6 m6">
-                                        <div class="card blue-grey darken-1">
-                                            <div class="card-content white-text">
+                                        <div className="card blue-grey darken-1">
+                                            <div className="card-content white-text">
                                                 <CanvasJSChart options = {optionsByAge}/>
                                             </div>
                                         </div>
@@ -296,8 +289,8 @@ export class dashboard extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col s12 m12">
-                                        <div class="card blue-grey darken-1">
-                                            <div class="card-content white-text">
+                                        <div className="card blue-grey darken-1">
+                                            <div className="card-content white-text">
                                                 <CanvasJSChart options = {optionsByStatus}/>
                                             </div>
                                         </div>

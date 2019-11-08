@@ -22,7 +22,6 @@ export class candidateDetails extends Component {
     }
 
     modalHandler = (event) =>{
-        console.log(event.target.dataset)
         var versionData = this.state.candidateData.versions.filter((val)=>{ 
             if(event.target.dataset.id == val._id){
                 return val;
@@ -37,15 +36,14 @@ export class candidateDetails extends Component {
     render() {
         const versions =  this.state.candidateData.versions !== undefined ? this.state.candidateData.versions : []
         const modalData = this.state.modalData[0] !== undefined ? this.state.modalData[0] : {}
-        console.log(modalData)
         return (
             <div>
                 <TopNav/>
                 <div className="container">
-                    <div class="col s12 m12">
-                        <div class="card ">
-                            <div class="card-content">
-                            <span class="card-title" style={{textAlign:'center'}}>Details Of : {this.state.candidateData.name}</span><br/><br/>
+                    <div className="col s12 m12">
+                        <div className="card ">
+                            <div className="card-content">
+                            <span className="card-title" style={{textAlign:'center'}}>Details Of : {this.state.candidateData.name}</span><br/><br/>
                             <h5>Personal Details</h5>
                             <hr/><br/>
                             <div className="row">
@@ -176,7 +174,7 @@ export class candidateDetails extends Component {
                                                        <td>{index+1}</td>
                                                         <td>{slice.status}</td>
                                                         <td>{new Date(slice.updatedAt).getDate() + '/' + (new Date(slice.updatedAt).getMonth()+1) + '/' + new Date(slice.updatedAt).getFullYear()}</td>
-                                                        <td><button data-target="modal1" data-id={slice._id} class="btn modal-trigger" onClick={this.modalHandler}>View</button></td>
+                                                        <td><button data-target="modal1" data-id={slice._id} className="btn modal-trigger" onClick={this.modalHandler}>View</button></td>
                                                     </tr>
                                                 )
                                             })
@@ -186,8 +184,8 @@ export class candidateDetails extends Component {
                                 </div>
                             </div>
                             <hr/><br/>
-                            <div id="modal1" class="modal ">
-                                <div class="modal-content">
+                            <div id="modal1" className="modal ">
+                                <div className="modal-content">
                                 <h4>Candidate's History Details</h4>
                                 <h5>Personal Details</h5>
                             <hr/><br/>
@@ -300,8 +298,8 @@ export class candidateDetails extends Component {
                             </div>
                             <br/>
                                 </div>
-                                <div class="modal-footer">
-                                <a href="#!" class="modal-close waves-effect waves-green btn-flat">OK</a>
+                                <div className="modal-footer">
+                                <a href="#!" className="modal-close waves-effect waves-green btn-flat">OK</a>
                                 </div>
                             </div>
                             </div>
