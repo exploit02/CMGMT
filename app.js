@@ -37,7 +37,7 @@ mongoose.connect(dbConfig.url, {
   process.exit();
 });
 
-var whitelist = ['http://localhost:4000', 'http://localhost:3000']
+var whitelist = ['http://localhost:4000', 'http://localhost:3000', 'https://candidatemgmt.herokuapp.com/']
 app.use(cors({
   origin: whitelist,
   credentials: true
