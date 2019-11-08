@@ -26,7 +26,7 @@ export class signIn extends Component {
     
         if(this.state.email && this.state.password){
             const res = await UserService.login(this.state)
-    
+            console.log(res)
             if(res.status == 201){
     
               this.setState({

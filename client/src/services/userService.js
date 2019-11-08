@@ -23,7 +23,7 @@ const ApiService = {
           })
         .catch(err => {
           const res = {
-              message : err.response.data.message,
+              message : err.response.data.Message,
               status : err.response.status
           }
           return res;
@@ -54,7 +54,6 @@ export const UserService = {
   },
 
   logout(token) {
-      console.log(token)
         return ApiService.post( '/users/logout', token)
   }
 }

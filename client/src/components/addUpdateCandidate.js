@@ -319,7 +319,7 @@ export class addUpdateCandidate extends Component {
         
         this.setState({ validation });
         this.submitted = true;
-        if(validation){
+        if(validation.isValid){
             const candidateServiceResponse = await CandidateService.addCandidate(this.state);
             if(candidateServiceResponse.status === 201){
                 this.props.history.push("/candidates");
@@ -334,7 +334,7 @@ export class addUpdateCandidate extends Component {
         const validation = this.validator.validate(this.state);
         this.setState({ validation });
         this.submitted = true;
-        if(validation){
+        if(validation.isValid){
             const candidateServiceResponse = await CandidateService.updateCandidate(this.state)
             if(candidateServiceResponse !== undefined && candidateServiceResponse.status === 200){
                 this.props.history.push("/candidates");
@@ -629,9 +629,9 @@ export class addUpdateCandidate extends Component {
                             <div className="card-action" style={{textAlign:'center'}}>
                                 {
                                     this.props.location.state.Id ? 
-                                    <a className="waves-effect waves-light btn blue" onClick={this.updateHandler}>Update</a> 
+                                    <a className="btn blue" onClick={this.updateHandler}>Update</a> 
                                     :
-                                    <a className="waves-effect waves-light btn blue" onClick={this.submitHandler}>Submit</a>
+                                    <a className="btn blue" onClick={this.submitHandler}>Submit</a>
                                 }
                             &emsp;&emsp;
                             <a className="waves-effect waves-light btn" style={{backgroundColor: '#FF6347'}} onClick={()=>{this.setState(this.baseState)}}>Reset</a>

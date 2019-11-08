@@ -5,7 +5,7 @@ function topNav() {
     return (
         <nav>
             <div className="nav-wrapper">
-            <a href="#" className="brand-logo">&nbsp;&nbsp;CM</a>
+            <a className="brand-logo" style={{pointerEvents:`none`}}>&nbsp;&nbsp;CM</a>
             <ul id="nav-mobile" className=" hide-on-med-and-down" style={{marginLeft:`7%`}}>
             <li><Link to={{pathname :`/`}}>
                         Home

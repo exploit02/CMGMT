@@ -184,7 +184,7 @@ export class candidateDetails extends Component {
                                 </div>
                             </div>
                             <hr/><br/>
-                            <div id="modal1" className="modal ">
+                            <div id="modal1" className="modal modal-fixed-footer">
                                 <div className="modal-content">
                                 <h4>Candidate's History Details</h4>
                                 <h5>Personal Details</h5>
