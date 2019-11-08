@@ -46,15 +46,15 @@ const ApiService = {
 
 export const UserService = {
   checkLogin() {
-    return ApiService.get( 'http://localhost:3001/users/checklogin' )
+    return ApiService.get( '/users/checklogin' )
   },
 
   login(userCredentials) {
-    return ApiService.post( 'http://localhost:3001/users/login', userCredentials)
+    return ApiService.post( '/users/login', userCredentials)
   },
 
   logout(token) {
       console.log(token)
-        return ApiService.post( 'http://localhost:3001/users/logout', token)
+        return ApiService.post( '/users/logout', token)
   }
 }
