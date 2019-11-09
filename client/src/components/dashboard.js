@@ -15,13 +15,6 @@ export class dashboard extends Component {
             fromDate: '',
             state:'',
             city:'',
-            dashboardDataByGender:[],
-            dashboardDataByStatus:[],
-            dashboardDataByAgegroup:[],
-            sample:{
-                'Male': 0,
-                'Female': 0
-            },
             countByGender:{
                 'Male': 0,
                 'Female': 0
@@ -71,40 +64,27 @@ export class dashboard extends Component {
         });
 
 
-        var dashboardDataByGender = await CandidateService.candidateCountByGender(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
-        var dashboardDataByStatus = await CandidateService.candidateCountByStatus(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
-        var dashboardDataByAgegroup = await CandidateService.candidateCountByAgegroup(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
-        var CountByGender = {}
-        var CountByAgeGroup = {}
-        var CountByStatus = {}
-        for(let i = 0; i < dashboardDataByGender.length; i++){
-            CountByGender[dashboardDataByGender[i]._id] = dashboardDataByGender[i].count
-        }
-        for(let i = 0; i < dashboardDataByAgegroup.length; i++){
-            CountByAgeGroup[dashboardDataByAgegroup[i].ageGroup] = dashboardDataByAgegroup[i].personCount
-        }
-        for(let i = 0; i < dashboardDataByStatus.length; i++){
-            CountByStatus[dashboardDataByStatus[i]._id] = dashboardDataByStatus[i].count
-        }
-
+        let dashboardDataByGender = await CandidateService.candidateCountByGender(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
+        let dashboardDataByStatus = await CandidateService.candidateCountByStatus(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
+        let dashboardDataByAgegroup = await CandidateService.candidateCountByAgegroup(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
         
-        // this.setState({
-        //     dashboardDataByGender: dashboardDataByGender,
-        //     dashboardDataByStatus: dashboardDataByStatus,
-        //     dashboardDataByAgegroup: dashboardDataByAgegroup,
-        //     sample : {[dashboardDataByGender[0]._id]:dashboardDataByGender[0].count}
-        // });
+        let CountByGender = {}
+        let CountByAgeGroup = {}
+        let CountByStatus = {}
+        
+        dashboardDataByGender.map((slice)=>{
+            CountByGender[slice._id] = slice.count
+        })
+
+        dashboardDataByAgegroup.map((slice)=>{
+            CountByAgeGroup[slice.ageGroup] = slice.personCount
+        })
+
+        dashboardDataByStatus.map((slice)=>{
+            CountByStatus[slice._id] = slice.count
+        })
 
         this.setState(prevState =>({
-            dashboardDataByGender: dashboardDataByGender,
-            dashboardDataByStatus: dashboardDataByStatus,
-            dashboardDataByAgegroup: dashboardDataByAgegroup,
-            sample: {
-                ...prevState.sample,
-                ...CountByGender
-                // [dashboardDataByGender[0]._id] : dashboardDataByGender[0].count,
-                // [dashboardDataByGender[1] !== undefined ? ([dashboardDataByGender[1]._id] : dashboardDataByGender[1].count) :null
-            },
             countByGender:{
                 ...prevState.countByGender,
                 ...CountByGender
@@ -128,47 +108,58 @@ export class dashboard extends Component {
     }
 
     filterHandler = async()=>{
-        var dashboardDataByGender = await CandidateService.candidateCountByGender(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
-        var dashboardDataByStatus = await CandidateService.candidateCountByStatus(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
-        var dashboardDataByAgegroup = await CandidateService.candidateCountByAgegroup(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
-
-        var CountByGender = {}
-        var CountByAgeGroup = {}
-        var CountByStatus = {}
-        for(let i = 0; i < dashboardDataByGender.length; i++){
-            CountByGender[dashboardDataByGender[i]._id] = dashboardDataByGender[i].count
-        }
-        for(let i = 0; i < dashboardDataByAgegroup.length; i++){
-            CountByAgeGroup[dashboardDataByAgegroup[i].ageGroup] = dashboardDataByAgegroup[i].personCount
-        }
-        for(let i = 0; i < dashboardDataByStatus.length; i++){
-            CountByStatus[dashboardDataByStatus[i]._id] = dashboardDataByStatus[i].count
-        }
-
+        let dashboardDataByGender = await CandidateService.candidateCountByGender(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
+        let dashboardDataByStatus = await CandidateService.candidateCountByStatus(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
+        let dashboardDataByAgegroup = await CandidateService.candidateCountByAgegroup(this.state.toDate, this.state.fromDate, this.state.state, this.state.city);
         
+        let genderCountObject = {
+            "Male": 0,
+            "Female": 0
+        }
 
-        this.setState(prevState =>({
-            dashboardDataByGender: dashboardDataByGender,
-            dashboardDataByStatus: dashboardDataByStatus,
-            dashboardDataByAgegroup: dashboardDataByAgegroup,
-            sample: {
-                ...prevState.sample,
-                ...CountByGender
-            },
-            countByGender:{
-                ...prevState.countByGender,
-                ...CountByGender
-            },
-            countByAgeGroup:{
-                ...prevState.countByAgeGroup,
-                ...CountByAgeGroup
-            },
-            countByStatus:{
-                ...prevState.countByAgeGroup,
-                ...CountByStatus
-            }
+        let statusCountObject = {
+            'Interested in exploring': 0,
+            'Undergoing Training': 0,
+            'Training Complete': 0,
+            'Stream identified': 0,
+            'Resume submitted': 0,
+            'Resume sent for processing': 0,
+            'Resume declined': 0,
+            'Resume accepted': 0,
+            'Due diligence': 0,
+            'Background check': 0,
+            'Job offer received': 0,
+            'No longer interested': 0,
+            'Deceased': 0
+        }
 
-        }))
+        let ageGroupCountObject = {
+            'Under 10Yrs': 0,
+            '10Yrs - 25Yrs': 0,
+            '25Yrs - 40Yrs': 0,
+            '40Yrs - 55Yrs': 0,
+            '55Yrs - 70Yrs': 0,
+            '70Yrs - 85Yrs': 0,
+            'Over 85Yrs': 0
+        }
+       
+        dashboardDataByGender.map((slice)=>{
+            genderCountObject[slice._id] = slice.count
+        })
+
+        dashboardDataByStatus.map((slice)=>{
+            statusCountObject[slice._id] = slice.count
+        })
+
+        dashboardDataByAgegroup.map((slice)=>{
+            ageGroupCountObject[slice.ageGroup] = slice.personCount
+        })
+
+        this.setState({
+            countByGender: genderCountObject,
+            countByAgeGroup: ageGroupCountObject,
+            countByStatus: statusCountObject
+        })
       }
     
     render() {
@@ -197,7 +188,7 @@ export class dashboard extends Component {
 				// Change type to "doughnut", "line", "splineArea", etc.
 				type: "column",
 				dataPoints: [
-					{ label: "Under 10",  y: this.state.countByAgeGroup["Under 10"]  },
+					{ label: "Under 10Yrs",  y: this.state.countByAgeGroup["Under 10Yrs"]  },
                     { label: "10Yrs - 25Yrs", y: this.state.countByAgeGroup["10Yrs - 25Yrs"]  },
                     { label: "25Yrs - 40Yrs",  y: this.state.countByAgeGroup["25Yrs - 40Yrs"]  },
 					{ label: "40Yrs - 55Yrs", y: this.state.countByAgeGroup["40Yrs - 55Yrs"]  },
